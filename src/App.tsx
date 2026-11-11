@@ -4,6 +4,7 @@ import ListaOcorrencias from "./pages/ListaOcorrencias";
 import Sobre from "./pages/Sobre";
 import Cabecalho from "./components/Cabecalho";
 import Integrantes from "./pages/Integrantes";
+import FAQ from './pages/FAQ'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/ocorrencias" element={<ListaOcorrencias />} />
           <Route path="/sobre" element={<Sobre />} />
           <Route path="/integrantes" element={<Integrantes />} />
+          <Route path="/faq" element={<FAQ />} />
           <Route
             path="*"
             element={
