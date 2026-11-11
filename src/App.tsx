@@ -5,6 +5,7 @@ import Sobre from "./pages/Sobre";
 import Cabecalho from "./components/Cabecalho";
 import Integrantes from "./pages/Integrantes";
 import FAQ from './pages/FAQ'
+import Contato from './pages/Contato'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/sobre" element={<Sobre />} />
           <Route path="/integrantes" element={<Integrantes />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/contato" element={<Contato />} />
           <Route
             path="*"
             element={
