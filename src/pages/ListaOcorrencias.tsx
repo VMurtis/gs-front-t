@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 export default function ListaOcorrencias() {
   return (
@@ -9,6 +10,13 @@ export default function ListaOcorrencias() {
       <p className="mt-3 text-slate-600">
         Aqui ficará a lista de problemas registrados pela comunidade.
       </p>
+
+      <Link
+        to="/ocorrencias/nova"
+        className="inline-flex items-center justify-center rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white transition hover:bg-blue-800"
+      >
+        + Nova ocorrência
+      </Link>
     </main>
-  )
+  );
 }
