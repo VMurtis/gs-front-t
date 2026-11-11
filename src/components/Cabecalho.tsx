@@ -34,6 +34,19 @@ export default function Cabecalho() {
                     <Link to="/contato" className="transition hover:text-blue-700">
             Contato
           </Link>
+          <Link
+  to="/login"
+  className="transition hover:text-blue-700"
+>
+  Entrar
+</Link>
+
+<Link
+  to="/cadastro"
+  className="rounded-lg bg-blue-700 px-4 py-2 text-white transition hover:bg-blue-800"
+>
+  Criar conta
+</Link>
         </div>
       </nav>
     </header>
