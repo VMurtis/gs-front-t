@@ -8,6 +8,8 @@ import FAQ from "./pages/FAQ";
 import Contato from "./pages/Contato";
 import NovaOcorrencia from "./pages/NovaOcorrencia";
 import DetalheOcorrencia from './pages/DetalheOcorrencia'
+import Cadastro from './pages/Cadastro'
+import Login from './pages/Login'
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
           <Route path="/contato" element={<Contato />} />
           <Route path="/ocorrencias/nova" element={<NovaOcorrencia />} />
           <Route path="/ocorrencias/:id" element={<DetalheOcorrencia />} />
+          <Route path="/cadastro" element={<Cadastro />} />
+          <Route path="/login" element={<Login />} />
           <Route
             path="*"
             element={
