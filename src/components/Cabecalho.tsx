@@ -24,6 +24,9 @@ export default function Cabecalho() {
           <Link to="/sobre" className="transition hover:text-blue-700">
             Sobre
           </Link>
+                    <Link to="/integrantes" className="transition hover:text-blue-700">
+            Integrantes
+          </Link>
         </div>
       </nav>
     </header>
