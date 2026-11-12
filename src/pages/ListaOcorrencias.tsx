@@ -10,7 +10,7 @@ import type {
 
 const exemplos: Ocorrencia[] = [
   {
-    id: 1,
+    id: -1,
     titulo: "Buraco na rua",
     categoria: "infraestrutura",
     endereco: "Rua das Flores, 120",
@@ -20,7 +20,7 @@ const exemplos: Ocorrencia[] = [
     atualizacoes: [],
   },
   {
-    id: 2,
+    id: -2,
     titulo: "Poste com lâmpada apagada",
     categoria: "iluminacao",
     endereco: "Avenida Central, 250",
@@ -30,7 +30,7 @@ const exemplos: Ocorrencia[] = [
     atualizacoes: [],
   },
   {
-    id: 3,
+    id: -3,
     titulo: "Descarte irregular de lixo",
     categoria: "lixo",
     endereco: "Rua do Parque, 45",
