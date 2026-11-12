@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import CartaoOcorrencia from "../components/CartaoOcorrencia";
 import { listarOcorrencias } from "../services/ocorrenciasService";
@@ -66,10 +66,15 @@ export default function ListaOcorrencias() {
   const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
   const [statusSelecionado, setStatusSelecionado] = useState("");
 
-  const [ocorrencias] = useState<Ocorrencia[]>(() => {
+  const [ocorrencias, setOcorrencias] = useState<Ocorrencia[]>(() => {
     const salvas = listarOcorrencias();
     return [...exemplos, ...salvas];
   });
+
+  useEffect(() => {
+    const salvas = listarOcorrencias();
+    setOcorrencias([...exemplos, ...salvas]);
+  }, []);
 
   const ocorrenciasFiltradas = ocorrencias.filter((ocorrencia) => {
     const correspondeCategoria =
