@@ -1,28 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import StatusOcorrencia from "../components/StatusOcorrencia";
 import CartaoOcorrencia from "../components/CartaoOcorrencia";
+import { listarOcorrencias } from "../services/ocorrenciasService";
+import type {
+  CategoriaOcorrencia,
+  StatusOcorrencia,
+  Ocorrencia,
+} from "../types/Ocorrencia";
 
-type Categoria =
-  | "infraestrutura"
-  | "iluminacao"
-  | "lixo"
-  | "calcada"
-  | "outros";
-
-type Status = "Pendente" | "Em andamento" | "Resolvida";
-
-type Ocorrencia = {
-  id: number;
-  titulo: string;
-  categoria: Categoria;
-  endereco: string;
-  descricao: string;
-  status: Status;
-  data: string;
-};
-
-const ocorrencias: Ocorrencia[] = [
+const exemplos: Ocorrencia[] = [
   {
     id: 1,
     titulo: "Buraco na rua",
@@ -31,6 +17,7 @@ const ocorrencias: Ocorrencia[] = [
     descricao: "Buraco na via dificultando a passagem dos veículos.",
     status: "Pendente",
     data: "11/11/2026",
+    atualizacoes: [],
   },
   {
     id: 2,
@@ -40,6 +27,7 @@ const ocorrencias: Ocorrencia[] = [
     descricao: "Trecho da rua está sem iluminação durante a noite.",
     status: "Em andamento",
     data: "10/11/2026",
+    atualizacoes: [],
   },
   {
     id: 3,
@@ -49,10 +37,11 @@ const ocorrencias: Ocorrencia[] = [
     descricao: "Há sacos de lixo acumulados na calçada.",
     status: "Resolvida",
     data: "08/11/2026",
+    atualizacoes: [],
   },
 ];
 
-const categorias: { valor: Categoria; nome: string }[] = [
+const categorias: { valor: CategoriaOcorrencia; nome: string }[] = [
   { valor: "infraestrutura", nome: "Buracos e vias públicas" },
   { valor: "iluminacao", nome: "Iluminação pública" },
   { valor: "lixo", nome: "Descarte irregular de lixo" },
@@ -60,9 +49,13 @@ const categorias: { valor: Categoria; nome: string }[] = [
   { valor: "outros", nome: "Outros problemas" },
 ];
 
-const statusDisponiveis: Status[] = ["Pendente", "Em andamento", "Resolvida"];
+const statusDisponiveis: StatusOcorrencia[] = [
+  "Pendente",
+  "Em andamento",
+  "Resolvida",
+];
 
-function nomeCategoria(categoria: Categoria): string {
+function nomeCategoria(categoria: CategoriaOcorrencia): string {
   return (
     categorias.find((item) => item.valor === categoria)?.nome ??
     "Outros problemas"
@@ -72,6 +65,11 @@ function nomeCategoria(categoria: Categoria): string {
 export default function ListaOcorrencias() {
   const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
   const [statusSelecionado, setStatusSelecionado] = useState("");
+
+  const [ocorrencias] = useState<Ocorrencia[]>(() => {
+    const salvas = listarOcorrencias();
+    return [...exemplos, ...salvas];
+  });
 
   const ocorrenciasFiltradas = ocorrencias.filter((ocorrencia) => {
     const correspondeCategoria =
@@ -90,7 +88,6 @@ export default function ListaOcorrencias() {
           <h1 className="text-3xl font-bold text-slate-800">
             Ocorrências do bairro
           </h1>
-
           <p className="mt-3 text-slate-600">
             Consulte os problemas registrados pela comunidade.
           </p>
@@ -115,7 +112,6 @@ export default function ListaOcorrencias() {
           >
             Filtrar por categoria
           </label>
-
           <select
             id="filtroCategoria"
             value={categoriaSelecionada}
@@ -138,7 +134,6 @@ export default function ListaOcorrencias() {
           >
             Filtrar por status
           </label>
-
           <select
             id="filtroStatus"
             value={statusSelecionado}
@@ -184,8 +179,8 @@ export default function ListaOcorrencias() {
       )}
 
       <p className="mt-6 text-xs text-slate-500">
-        Os registros exibidos são fictícios e servem apenas para testar a
-        interface. Os dados reais serão carregados pela API Java.
+        Os registros ainda são armazenados localmente no navegador. A integração
+        com a API Java será realizada posteriormente.
       </p>
     </main>
   );

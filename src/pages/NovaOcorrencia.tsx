@@ -1,26 +1,74 @@
+
 import { useState, type FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
+import { salvarOcorrencia } from "../services/ocorrenciasService";
+import type { CategoriaOcorrencia, Ocorrencia } from "../types/Ocorrencia";
 
 export default function NovaOcorrencia() {
   const [titulo, setTitulo] = useState("");
-  const [categoria, setCategoria] = useState("");
+  const [categoria, setCategoria] = useState<CategoriaOcorrencia | "">("");
   const [descricao, setDescricao] = useState("");
   const [endereco, setEndereco] = useState("");
   const [mensagem, setMensagem] = useState("");
-  const [foto, setFoto] = useState<File | null>(null)
+  const [foto, setFoto] = useState<File | null>(null);
+
+  const navegar = useNavigate();
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    setMensagem(
-      "Formulário validado! O registro será salvo quando a API estiver integrada.",
+    const ocorrenciasSalvas = localStorage.getItem(
+      "bairro-online-ocorrencias",
     );
+
+    let proximoId = 1;
+
+    if (ocorrenciasSalvas) {
+      try {
+        const ocorrencias = JSON.parse(ocorrenciasSalvas) as Ocorrencia[];
+        proximoId =
+          ocorrencias.reduce(
+            (maiorId, ocorrencia) => Math.max(maiorId, ocorrencia.id),
+            0,
+          ) + 1;
+      } catch {
+        setMensagem("Não foi possível ler as ocorrências salvas.");
+        return;
+      }
+    }
+
+    if (!categoria) {
+      setMensagem("Selecione uma categoria.");
+      return;
+    }
+
+    const novaOcorrencia: Ocorrencia = {
+      id: proximoId,
+      titulo: titulo.trim(),
+      categoria,
+      descricao: descricao.trim(),
+      endereco: endereco.trim(),
+      status: "Pendente",
+      data: new Date().toLocaleDateString("pt-BR"),
+      atualizacoes: [],
+    };
+
+    try {
+      salvarOcorrencia(novaOcorrencia);
+
+      // A foto ainda não é armazenada nesta versão.
+      void foto;
+
+      navegar("/ocorrencias");
+    } catch {
+      setMensagem("Não foi possível salvar. Verifique o armazenamento do navegador.");
+    }
   }
 
   return (
     <main className="mx-auto min-h-screen max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
       <section className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Nova ocorrência</h1>
-
         <p className="mt-3 leading-7 text-gray-600">
           Encontrou um problema no seu bairro? Registre as informações para
           facilitar a identificação da situação.
@@ -32,13 +80,9 @@ export default function NovaOcorrencia() {
         className="space-y-5 rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
       >
         <div>
-          <label
-            htmlFor="titulo"
-            className="mb-2 block font-medium text-gray-700"
-          >
+          <label htmlFor="titulo" className="mb-2 block font-medium text-gray-700">
             Título da ocorrência
           </label>
-
           <input
             id="titulo"
             type="text"
@@ -55,18 +99,14 @@ export default function NovaOcorrencia() {
         </div>
 
         <div>
-          <label
-            htmlFor="categoria"
-            className="mb-2 block font-medium text-gray-700"
-          >
+          <label htmlFor="categoria" className="mb-2 block font-medium text-gray-700">
             Categoria
           </label>
-
           <select
             id="categoria"
             value={categoria}
             onChange={(event) => {
-              setCategoria(event.target.value);
+              setCategoria(event.target.value as CategoriaOcorrencia | "");
               setMensagem("");
             }}
             required
@@ -82,13 +122,9 @@ export default function NovaOcorrencia() {
         </div>
 
         <div>
-          <label
-            htmlFor="descricao"
-            className="mb-2 block font-medium text-gray-700"
-          >
+          <label htmlFor="descricao" className="mb-2 block font-medium text-gray-700">
             Descrição do problema
           </label>
-
           <textarea
             id="descricao"
             value={descricao}
@@ -106,13 +142,9 @@ export default function NovaOcorrencia() {
         </div>
 
         <div>
-          <label
-            htmlFor="endereco"
-            className="mb-2 block font-medium text-gray-700"
-          >
+          <label htmlFor="endereco" className="mb-2 block font-medium text-gray-700">
             Endereço do problema
           </label>
-
           <input
             id="endereco"
             type="text"
@@ -129,13 +161,9 @@ export default function NovaOcorrencia() {
         </div>
 
         <div>
-          <label
-            htmlFor="foto"
-            className="mb-2 block font-medium text-gray-700"
-          >
+          <label htmlFor="foto" className="mb-2 block font-medium text-gray-700">
             Foto do problema (opcional)
           </label>
-
           <input
             id="foto"
             type="file"
@@ -146,12 +174,9 @@ export default function NovaOcorrencia() {
             }}
             className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-700 file:mr-4 file:rounded-md file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:font-medium file:text-blue-700 hover:file:bg-blue-100"
           />
-
           <p className="mt-2 text-sm text-gray-500">
-            Se possível, envie uma foto que mostre o problema. Formatos de
-            imagem, como JPG e PNG, são aceitos.
+            A foto pode ser selecionada, mas ainda não é salva nesta versão.
           </p>
-
           {foto && (
             <p className="mt-2 text-sm text-gray-700">
               Arquivo selecionado: {foto.name}
