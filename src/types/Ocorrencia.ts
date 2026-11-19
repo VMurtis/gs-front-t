@@ -7,9 +7,9 @@ export type CategoriaOcorrencia =
   | "outros";
 
 export type StatusOcorrencia =
-  | "Pendente"
-  | "Em andamento"
-  | "Resolvida";
+  | "PENDENTE"
+  | "EM_ANDAMENTO"
+  | "RESOLVIDA";
 
 export type AtualizacaoOcorrencia = {
   data: string;
@@ -23,6 +23,8 @@ export type Ocorrencia = {
   descricao: string;
   endereco: string;
   status: StatusOcorrencia;
-  data: string;
-  atualizacoes: AtualizacaoOcorrencia[];
+  data?: string;
+  atualizacoes?: AtualizacaoOcorrencia[];
+  mensagemAdministrador?: string | null;
+  fotoUrl?: string | null;
 };
