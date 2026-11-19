@@ -13,6 +13,7 @@ import Login from "./pages/Login";
 import AdministracaoOcorrencias from "./pages/AdministracaoOcorrencias";
 import Perfil from "./pages/Perfil";
 import EditarOcorrencia from "./pages/EditarOcorrencia";
+import Rodape from "./components/Rodape";
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
           <Route path="/perfil" element={<Perfil />} />
         </Routes>
       </div>
+      <Rodape />
     </BrowserRouter>
   );
 }
