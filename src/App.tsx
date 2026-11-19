@@ -11,6 +11,8 @@ import DetalheOcorrencia from "./pages/DetalheOcorrencia";
 import Cadastro from "./pages/Cadastro";
 import Login from "./pages/Login";
 import AdministracaoOcorrencias from "./pages/AdministracaoOcorrencias";
+import Perfil from "./pages/Perfil";
+import EditarOcorrencia from "./pages/EditarOcorrencia";
 
 function App() {
   return (
@@ -26,6 +28,10 @@ function App() {
           <Route path="/contato" element={<Contato />} />
           <Route path="/ocorrencias/nova" element={<NovaOcorrencia />} />
           <Route path="/ocorrencias/:id" element={<DetalheOcorrencia />} />
+          <Route
+            path="/ocorrencias/:id/editar"
+            element={<EditarOcorrencia />}
+          />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/login" element={<Login />} />
           <Route
@@ -46,6 +52,7 @@ function App() {
               </main>
             }
           />
+          <Route path="/perfil" element={<Perfil />} />
         </Routes>
       </div>
     </BrowserRouter>
