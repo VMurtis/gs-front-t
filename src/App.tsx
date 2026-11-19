@@ -14,6 +14,7 @@ import AdministracaoOcorrencias from "./pages/AdministracaoOcorrencias";
 import Perfil from "./pages/Perfil";
 import EditarOcorrencia from "./pages/EditarOcorrencia";
 import Rodape from "./components/Rodape";
+import PaginaNaoEncontrada from "./pages/erros/PaginaNaoEncontrada";
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
             }
           />
           <Route path="/perfil" element={<Perfil />} />
+          <Route path="*" element={<PaginaNaoEncontrada />} />
         </Routes>
       </div>
       <Rodape />
