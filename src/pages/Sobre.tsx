@@ -9,18 +9,11 @@ export default function Sobre() {
         </h1>
 
         <p className="mt-4 leading-relaxed text-slate-600">
-          O Bairro Online é um projeto que busca aproximar os cidadãos e as
-          soluções para os problemas urbanos de suas comunidades. A plataforma
-          oferece um espaço para que os moradores possam registrar ocorrências
-          e acompanhar seu andamento, contribuindo para a melhoria do bairro.
+         O Bairro Online é uma plataforma digital que disponibiliza um espaço virtual no qual os moradores podem registrar ocorrências urbanas após o registro, é possível acompanhar o andamento de cada solicitação, o que permite ao usuário saber em que etapa se encontra o atendimento de sua demanda.
         </p>
 
         <p className="mt-4 leading-relaxed text-slate-600">
-          Problemas como buracos nas ruas, iluminação pública deficiente,
-          descarte irregular de lixo e calçadas danificadas podem afetar a
-          segurança, a mobilidade e a qualidade de vida da população. Por isso,
-          facilitar o registro dessas situações é um passo importante para
-          dar visibilidade às necessidades da comunidade.
+          Problemas urbanos como buracos nas ruas e avenidas, falhas e precariedade na iluminação pública, descarte irregular de resíduos e calçadas danificadas podem comprometer a segurança, a mobilidade e a qualidade de vida da população. Nesse contexto, facilitar o registro dessas ocorrências constitui um passo relevante para conferir visibilidade às necessidades da comunidade e subsidiar a atuação do poder público.
         </p>
       </section>
 
@@ -30,10 +23,7 @@ export default function Sobre() {
         </h2>
 
         <p className="mt-4 leading-relaxed text-slate-600">
-          Nosso objetivo é incentivar a participação dos moradores na
-          identificação de problemas urbanos, tornando o registro de ocorrências
-          mais simples e organizado. Queremos contribuir para uma comunidade
-          mais participativa, consciente e comprometida com o espaço público.
+         O Bairro Online é um projeto que tem como objetivo aproximar os cidadãos das soluções para os problemas urbanos enfrentados em suas comunidades. A plataforma disponibiliza um espaço virtual no qual os moradores podem registrar ocorrências e acompanhar o andamento de cada solicitação. Dessa forma, promove-se a participação ativa da população na melhoria do local onde os próprios moradores vivem e convivem, fortalecendo o vínculo entre os cidadãos e o território que habitam.
         </p>
       </section>
 
