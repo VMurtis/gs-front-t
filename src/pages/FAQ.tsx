@@ -8,7 +8,7 @@ const perguntas = [
   {
     pergunta: "Quais problemas posso registrar?",
     resposta:
-      "Você pode registrar problemas como buracos e vias públicas danificadas, iluminação pública deficiente, descarte irregular de lixo, calçadas danificadas e outros problemas urbanos.",
+      "Você pode registrar problemas como buracos e vias públicas danificadas, iluminação pública precária, descarte irregular de lixo, calçadas danificadas e outros problemas urbanos.",
   },
   {
     pergunta: "Preciso criar uma conta para utilizar a plataforma?",
