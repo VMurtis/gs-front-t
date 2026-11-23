@@ -1,25 +1,7 @@
 
 import { Link } from 'react-router-dom'
 import StatusOcorrencia from './StatusOcorrencia'
-
-type Categoria =
-  | 'infraestrutura'
-  | 'iluminacao'
-  | 'lixo'
-  | 'calcada'
-  | 'outros'
-
-type Status = 'Pendente' | 'Em andamento' | 'Resolvida'
-
-type Ocorrencia = {
-  id: number
-  titulo: string
-  categoria: Categoria
-  endereco: string
-  descricao: string
-  status: Status
-  data: string
-}
+import type { Ocorrencia } from '../types/Ocorrencia'
 
 type CartaoOcorrenciaProps = {
   ocorrencia: Ocorrencia

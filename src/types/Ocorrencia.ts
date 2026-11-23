@@ -24,6 +24,9 @@ export type Ocorrencia = {
   endereco: string;
   status: StatusOcorrencia;
   data?: string;
+  dataRegistro?: string;
+  nomeUsuario?: string;
+  usuarioId?: number;
   atualizacoes?: AtualizacaoOcorrencia[];
   mensagemAdministrador?: string | null;
   fotoUrl?: string | null;

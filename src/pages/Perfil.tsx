@@ -56,9 +56,6 @@ export default function Perfil() {
 
   async function salvarPerfil(evento: React.FormEvent<HTMLFormElement>) {
     evento.preventDefault();
-    console.log("salvarPerfil foi executada");
-    console.log("Evento que enviou o formulário:", evento.nativeEvent);
-    console.log("Elemento que iniciou o envio:", evento.nativeEvent.submitter);
     setErro("");
     setMensagem("");
     setSalvando(true);
