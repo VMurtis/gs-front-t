@@ -1,5 +1,5 @@
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
-import PaginaInicial from "./pages/PaginaInicial";
+import Index from "./pages/Index";
 import ListaOcorrencias from "./pages/ListaOcorrencias";
 import Sobre from "./pages/Sobre";
 import Cabecalho from "./components/Cabecalho";
@@ -22,7 +22,7 @@ function App() {
       <Cabecalho />
       <div className="min-h-screen bg-slate-50">
         <Routes>
-          <Route path="/" element={<PaginaInicial />} />
+          <Route path="/" element={<Index />} />
           <Route path="/ocorrencias" element={<ListaOcorrencias />} />
           <Route path="/sobre" element={<Sobre />} />
           <Route path="/integrantes" element={<Integrantes />} />
