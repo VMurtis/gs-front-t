@@ -1,18 +1,81 @@
-
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, type FormEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const [email, setEmail] = useState('')
-  const [senha, setSenha] = useState('')
-  const [mensagem, setMensagem] = useState('')
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [mensagem, setMensagem] = useState("");
+  const [carregando, setCarregando] = useState(false);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+  const navigate = useNavigate();
 
-    setMensagem(
-      'Formulário validado! O login real estará disponível após a integração com a API.'
-    )
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    setMensagem("");
+    setCarregando(true);
+
+    try {
+      // Obter o token CSRF e iniciar a sessão de comunicação.
+      const respostaCsrf = await fetch(
+        "https://bairro-online-api.onrender.com/csrf",
+        {
+          credentials: "include",
+        },
+      );
+
+      if (!respostaCsrf.ok) {
+        throw new Error("Não foi possível iniciar a autenticação.");
+      }
+
+      // 2. Ler o token do cookie criado pelo Spring Security.
+      const dadosCsrf: { token: string } = await respostaCsrf.json();
+      const tokenCsrf = dadosCsrf.token;
+
+      // 3. Enviar as credenciais no formato esperado pelo Spring Security.
+      const dados = new URLSearchParams();
+      dados.append("username", email.trim());
+      dados.append("password", senha);
+
+      const resposta = await fetch(
+        "https://bairro-online-api.onrender.com/login",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-XSRF-TOKEN": tokenCsrf,
+          },
+          body: dados.toString(),
+        },
+      );
+
+      if (resposta.status === 401) {
+        setMensagem("E-mail ou senha inválidos.");
+        return;
+      }
+
+      if (!resposta.ok) {
+        throw new Error("Não foi possível realizar o login.");
+      }
+
+      console.log("Login realizado com sucesso!");
+      navigate("/");
+    } catch (erro) {
+      if (erro instanceof TypeError) {
+        setMensagem(
+          "Não foi possível conectar ao servidor. Verifique se o sistema está disponível e tente novamente.",
+        );
+      } else {
+        setMensagem(
+          erro instanceof Error
+            ? erro.message
+            : "Erro inesperado ao realizar o login.",
+        );
+      }
+    } finally {
+      setCarregando(false);
+    }
   }
 
   return (
@@ -66,21 +129,25 @@ export default function Login() {
           </div>
 
           {mensagem && (
-            <p role="status" className="rounded-lg bg-blue-50 p-3 text-sm text-blue-800">
+            <p
+              role="status"
+              className="rounded-lg bg-blue-50 p-3 text-sm text-blue-800"
+            >
               {mensagem}
             </p>
           )}
 
           <button
             type="submit"
-            className="w-full rounded-lg bg-blue-700 px-4 py-3 font-semibold text-white transition hover:bg-blue-800"
+            disabled={carregando}
+            className="w-full rounded-lg bg-blue-700 px-4 py-3 font-semibold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Entrar
+            {carregando ? "Entrando..." : "Entrar"}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-slate-600">
-          Ainda não tem uma conta?{' '}
+          Ainda não tem uma conta?{" "}
           <Link
             to="/cadastro"
             className="font-semibold text-blue-700 hover:underline"
@@ -90,5 +157,5 @@ export default function Login() {
         </p>
       </section>
     </main>
-  )
+  );
 }

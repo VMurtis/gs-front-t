@@ -1,26 +1,73 @@
-
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Cadastro() {
-  const [nome, setNome] = useState('')
-  const [email, setEmail] = useState('')
-  const [senha, setSenha] = useState('')
-  const [confirmacaoSenha, setConfirmacaoSenha] = useState('')
-  const [mensagem, setMensagem] = useState('')
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [confirmacaoSenha, setConfirmacaoSenha] = useState("");
+  const [mensagem, setMensagem] = useState("");
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setMensagem('')
+  const [carregando, setCarregando] = useState(false);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setMensagem("");
 
     if (senha !== confirmacaoSenha) {
-      setMensagem('As senhas não são iguais.')
-      return
+      setMensagem("As senhas não são iguais.");
+      return;
     }
 
-    setMensagem(
-      'Validação concluída! O cadastro real estará disponível após a integração com a API.'
-    )
+    setCarregando(true);
+
+    try {
+      const resposta = await fetch("https://bairro-online-api.onrender.com/usuarios", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nome: nome.trim(),
+          email: email.trim(),
+          senha,
+        }),
+      });
+
+      if (!resposta.ok) {
+        if (resposta.status === 409) {
+          throw new Error("Este e-mail já está cadastrado.");
+        }
+
+        if (resposta.status === 403) {
+          throw new Error(
+            "Cadastro bloqueado pela segurança da API. Precisamos verificar o CSRF.",
+          );
+        }
+
+        if (resposta.status === 400) {
+          throw new Error("Confira os dados informados e tente novamente.");
+        }
+
+        throw new Error(
+          `Não foi possível cadastrar. Erro HTTP ${resposta.status}.`,
+        );
+      }
+
+      setMensagem("Conta criada com sucesso! Você já pode entrar.");
+      setNome("");
+      setEmail("");
+      setSenha("");
+      setConfirmacaoSenha("");
+    } catch (erro) {
+      setMensagem(
+        erro instanceof Error
+          ? erro.message
+          : "Não foi possível conectar à API.",
+      );
+    } finally {
+      setCarregando(false);
+    }
   }
 
   return (
@@ -36,7 +83,10 @@ export default function Cadastro() {
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>
-            <label htmlFor="nome" className="mb-1 block text-sm font-medium text-slate-700">
+            <label
+              htmlFor="nome"
+              className="mb-1 block text-sm font-medium text-slate-700"
+            >
               Nome completo
             </label>
             <input
@@ -52,7 +102,10 @@ export default function Cadastro() {
           </div>
 
           <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium text-slate-700">
+            <label
+              htmlFor="email"
+              className="mb-1 block text-sm font-medium text-slate-700"
+            >
               E-mail
             </label>
             <input
@@ -68,7 +121,10 @@ export default function Cadastro() {
           </div>
 
           <div>
-            <label htmlFor="senha" className="mb-1 block text-sm font-medium text-slate-700">
+            <label
+              htmlFor="senha"
+              className="mb-1 block text-sm font-medium text-slate-700"
+            >
               Senha
             </label>
             <input
@@ -85,7 +141,10 @@ export default function Cadastro() {
           </div>
 
           <div>
-            <label htmlFor="confirmacaoSenha" className="mb-1 block text-sm font-medium text-slate-700">
+            <label
+              htmlFor="confirmacaoSenha"
+              className="mb-1 block text-sm font-medium text-slate-700"
+            >
               Confirmar senha
             </label>
             <input
@@ -102,26 +161,33 @@ export default function Cadastro() {
           </div>
 
           {mensagem && (
-            <p role="status" className="rounded-lg bg-blue-50 p-3 text-sm text-blue-800">
+            <p
+              role="status"
+              className="rounded-lg bg-blue-50 p-3 text-sm text-blue-800"
+            >
               {mensagem}
             </p>
           )}
 
           <button
             type="submit"
-            className="w-full rounded-lg bg-blue-700 px-4 py-3 font-semibold text-white transition hover:bg-blue-800"
+            disabled={carregando}
+            className="w-full rounded-lg bg-blue-700 px-4 py-3 font-semibold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Criar conta
+            {carregando ? "Criando conta..." : "Criar conta"}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-slate-600">
-          Já tem uma conta?{' '}
-          <Link to="/login" className="font-semibold text-blue-700 hover:underline">
+          Já tem uma conta?{" "}
+          <Link
+            to="/login"
+            className="font-semibold text-blue-700 hover:underline"
+          >
             Entrar
           </Link>
         </p>
       </section>
     </main>
-  )
+  );
 }

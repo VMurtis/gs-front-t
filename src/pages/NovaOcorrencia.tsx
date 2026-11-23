@@ -1,69 +1,94 @@
+import { useState } from "react";
 
-import { useState, type FormEvent } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { salvarOcorrencia } from "../services/ocorrenciasService";
-import type { CategoriaOcorrencia, Ocorrencia } from "../types/Ocorrencia";
+
+interface FormInputTipos {
+  titulo: string;
+  categoria: string;
+  descricao: string;
+  endereco: string;
+  foto: File | null;
+}
 
 export default function NovaOcorrencia() {
-  const [titulo, setTitulo] = useState("");
-  const [categoria, setCategoria] = useState<CategoriaOcorrencia | "">("");
-  const [descricao, setDescricao] = useState("");
-  const [endereco, setEndereco] = useState("");
   const [mensagem, setMensagem] = useState("");
   const [foto, setFoto] = useState<File | null>(null);
+  const navigate = useNavigate();
 
-  const navegar = useNavigate();
+  const { register, handleSubmit } = useForm<FormInputTipos>();
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const ocorrenciasSalvas = localStorage.getItem(
-      "bairro-online-ocorrencias",
-    );
-
-    let proximoId = 1;
-
-    if (ocorrenciasSalvas) {
-      try {
-        const ocorrencias = JSON.parse(ocorrenciasSalvas) as Ocorrencia[];
-        proximoId =
-          ocorrencias.reduce(
-            (maiorId, ocorrencia) => Math.max(maiorId, ocorrencia.id),
-            0,
-          ) + 1;
-      } catch {
-        setMensagem("Não foi possível ler as ocorrências salvas.");
-        return;
-      }
-    }
-
-    if (!categoria) {
-      setMensagem("Selecione uma categoria.");
-      return;
-    }
-
-    const novaOcorrencia: Ocorrencia = {
-      id: proximoId,
-      titulo: titulo.trim(),
-      categoria,
-      descricao: descricao.trim(),
-      endereco: endereco.trim(),
-      status: "Pendente",
-      data: new Date().toLocaleDateString("pt-BR"),
-      atualizacoes: [],
-    };
+  const aoSubmeter = async (dados: FormInputTipos) => {
+    setMensagem("");
 
     try {
-      salvarOcorrencia(novaOcorrencia);
+      // Busca o token CSRF do backend
+      const respostaCsrf = await fetch("https://bairro-online-api.onrender.com/csrf", {
+        credentials: "include",
+      });
 
-      // A foto ainda não é armazenada nesta versão.
-      void foto;
+      if (!respostaCsrf.ok) {
+        throw new Error("Não foi possível obter o token de segurança.");
+      }
 
-      navegar("/ocorrencias");
-    } catch {
-      setMensagem("Não foi possível salvar. Verifique o armazenamento do navegador.");
+      const textoCsrf = await respostaCsrf.text();
+
+      const csrf = JSON.parse(textoCsrf);
+
+      // Prepara os dados da ocorrência e a foto
+      const formulario = new FormData();
+
+      formulario.append(
+        "dados",
+        new Blob(
+          [
+            JSON.stringify({
+              titulo: dados.titulo,
+              categoria: dados.categoria,
+              descricao: dados.descricao,
+              endereco: dados.endereco,
+            }),
+          ],
+          { type: "application/json" },
+        ),
+      );
+
+      if (foto) {
+        formulario.append("foto", foto);
+      }
+
+      // Envia a ocorrência para o backend
+      const resposta = await fetch("https://bairro-online-api.onrender.com/ocorrencias", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          [csrf.headerName]: csrf.token,
+        },
+        body: formulario,
+      });
+
+      if (resposta.status === 401 || resposta.status === 403) {
+        throw new Error(
+          "Você precisa entrar na sua conta para registrar uma ocorrência. Faça login e tente novamente.",
+        );
+      }
+
+      if (!resposta.ok) {
+        throw new Error(
+          "Não foi possível cadastrar a ocorrência. Tente novamente.",
+        );
+      }
+
+      setMensagem("Ocorrência registrada com sucesso!");
+      navigate("/ocorrencias");
+    } catch (erro) {
+      setMensagem(
+        erro instanceof Error
+          ? erro.message
+          : "Não foi possível registrar a ocorrência.",
+      );
     }
-  }
+  };
 
   return (
     <main className="mx-auto min-h-screen max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
@@ -76,40 +101,36 @@ export default function NovaOcorrencia() {
       </section>
 
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(aoSubmeter)}
         className="space-y-5 rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
       >
         <div>
-          <label htmlFor="titulo" className="mb-2 block font-medium text-gray-700">
+          <label
+            htmlFor="titulo"
+            className="mb-2 block font-medium text-gray-700"
+          >
             Título da ocorrência
           </label>
           <input
             id="titulo"
             type="text"
-            value={titulo}
-            onChange={(event) => {
-              setTitulo(event.target.value);
-              setMensagem("");
-            }}
+            {...register("titulo", { required: true, minLength: 5 })}
             placeholder="Ex.: Buraco na rua"
-            required
             maxLength={100}
             className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
           />
         </div>
 
         <div>
-          <label htmlFor="categoria" className="mb-2 block font-medium text-gray-700">
+          <label
+            htmlFor="categoria"
+            className="mb-2 block font-medium text-gray-700"
+          >
             Categoria
           </label>
           <select
             id="categoria"
-            value={categoria}
-            onChange={(event) => {
-              setCategoria(event.target.value as CategoriaOcorrencia | "");
-              setMensagem("");
-            }}
-            required
+            {...register("categoria")}
             className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
           >
             <option value="">Selecione uma categoria</option>
@@ -122,18 +143,20 @@ export default function NovaOcorrencia() {
         </div>
 
         <div>
-          <label htmlFor="descricao" className="mb-2 block font-medium text-gray-700">
+          <label
+            htmlFor="descricao"
+            className="mb-2 block font-medium text-gray-700"
+          >
             Descrição do problema
           </label>
           <textarea
             id="descricao"
-            value={descricao}
-            onChange={(event) => {
-              setDescricao(event.target.value);
-              setMensagem("");
-            }}
+            {...register("descricao", {
+              required: true,
+              minLength: 10,
+              maxLength: 100,
+            })}
             placeholder="Descreva o problema encontrado..."
-            required
             minLength={10}
             maxLength={1000}
             rows={5}
@@ -142,32 +165,34 @@ export default function NovaOcorrencia() {
         </div>
 
         <div>
-          <label htmlFor="endereco" className="mb-2 block font-medium text-gray-700">
+          <label
+            htmlFor="endereco"
+            className="mb-2 block font-medium text-gray-700"
+          >
             Endereço do problema
           </label>
           <input
             id="endereco"
             type="text"
-            value={endereco}
-            onChange={(event) => {
-              setEndereco(event.target.value);
-              setMensagem("");
-            }}
+            {...register("endereco")}
             placeholder="Rua, número e bairro"
-            required
             maxLength={200}
             className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
           />
         </div>
 
         <div>
-          <label htmlFor="foto" className="mb-2 block font-medium text-gray-700">
+          <label
+            htmlFor="foto"
+            className="mb-2 block font-medium text-gray-700"
+          >
             Foto do problema (opcional)
           </label>
           <input
             id="foto"
             type="file"
             accept="image/*"
+            {...register("foto")}
             onChange={(event) => {
               setFoto(event.target.files?.[0] ?? null);
               setMensagem("");

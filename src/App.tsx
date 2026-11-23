@@ -1,5 +1,5 @@
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
-import PaginaInicial from "./pages/PaginaInicial";
+import Index from "./pages/Index";
 import ListaOcorrencias from "./pages/ListaOcorrencias";
 import Sobre from "./pages/Sobre";
 import Cabecalho from "./components/Cabecalho";
@@ -11,6 +11,10 @@ import DetalheOcorrencia from "./pages/DetalheOcorrencia";
 import Cadastro from "./pages/Cadastro";
 import Login from "./pages/Login";
 import AdministracaoOcorrencias from "./pages/AdministracaoOcorrencias";
+import Perfil from "./pages/Perfil";
+import EditarOcorrencia from "./pages/EditarOcorrencia";
+import Rodape from "./components/Rodape";
+import PaginaNaoEncontrada from "./pages/erros/PaginaNaoEncontrada";
 
 function App() {
   return (
@@ -18,7 +22,7 @@ function App() {
       <Cabecalho />
       <div className="min-h-screen bg-slate-50">
         <Routes>
-          <Route path="/" element={<PaginaInicial />} />
+          <Route path="/" element={<Index />} />
           <Route path="/ocorrencias" element={<ListaOcorrencias />} />
           <Route path="/sobre" element={<Sobre />} />
           <Route path="/integrantes" element={<Integrantes />} />
@@ -26,6 +30,10 @@ function App() {
           <Route path="/contato" element={<Contato />} />
           <Route path="/ocorrencias/nova" element={<NovaOcorrencia />} />
           <Route path="/ocorrencias/:id" element={<DetalheOcorrencia />} />
+          <Route
+            path="/ocorrencias/:id/editar"
+            element={<EditarOcorrencia />}
+          />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/login" element={<Login />} />
           <Route
@@ -46,8 +54,11 @@ function App() {
               </main>
             }
           />
+          <Route path="/perfil" element={<Perfil />} />
+          <Route path="*" element={<PaginaNaoEncontrada />} />
         </Routes>
       </div>
+      <Rodape />
     </BrowserRouter>
   );
 }
