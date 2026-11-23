@@ -8,6 +8,7 @@ import type {
   Ocorrencia,
 } from "../types/Ocorrencia";
 
+
 const categorias: { valor: CategoriaOcorrencia; nome: string }[] = [
   { valor: "infraestrutura", nome: "Buracos e vias públicas" },
   { valor: "iluminacao", nome: "Iluminação pública" },

@@ -2,7 +2,6 @@
 export default function PaginaInicial() {
   return (
     <main className="mx-auto max-w-6xl space-y-10 px-4 py-10">
-      {/* Apresentação */}
       <section className="text-center">
         <h1 className="text-4xl font-bold text-blue-800 sm:text-5xl">
           Bairro Online
@@ -14,8 +13,6 @@ export default function PaginaInicial() {
           em um só lugar.
         </p>
       </section>
-
-      {/* Imagem principal */}
       <section>
         <img
           src="/images/bairro.jpg"
@@ -24,7 +21,6 @@ export default function PaginaInicial() {
         />
       </section>
 
-      {/* Card sobre o projeto */}
       <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
         <h2 className="text-2xl font-bold text-gray-800">
           Sobre o Bairro Online

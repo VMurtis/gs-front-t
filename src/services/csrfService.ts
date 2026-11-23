@@ -1,5 +1,5 @@
 export async function buscarTokenCsrf(): Promise<string> {
-  const resposta = await fetch("http://localhost:8080/csrf", {
+  const resposta = await fetch("https://bairro-online-api.onrender.com/csrf", {
     credentials: "include",
   });
 

@@ -21,7 +21,7 @@ export default function Perfil() {
   useEffect(() => {
     async function carregarPerfil() {
       try {
-        const resposta = await fetch("http://localhost:8080/usuarios/perfil", {
+        const resposta = await fetch("https://bairro-online-api.vercel.app/usuarios/perfil", {
           credentials: "include",
         });
 
@@ -66,7 +66,7 @@ export default function Perfil() {
     try {
       const tokenCsrf = await buscarTokenCsrf();
 
-      const resposta = await fetch("http://localhost:8080/usuarios/perfil", {
+      const resposta = await fetch("https://bairro-online-api.onrender.com/usuarios/perfil", {
         method: "PUT",
         credentials: "include",
         headers: {
@@ -114,7 +114,7 @@ export default function Perfil() {
     try {
       const tokenCsrf = await buscarTokenCsrf();
 
-      const resposta = await fetch("http://localhost:8080/usuarios/perfil", {
+      const resposta = await fetch("https://bairro-online-api.onrender.com/usuarios/perfil", {
         method: "DELETE",
         credentials: "include",
         headers: {

@@ -23,7 +23,7 @@ export default function NovaOcorrencia() {
 
     try {
       // Busca o token CSRF do backend
-      const respostaCsrf = await fetch("http://localhost:8080/csrf", {
+      const respostaCsrf = await fetch("https://bairro-online-api.onrender.com/csrf", {
         credentials: "include",
       });
 
@@ -58,7 +58,7 @@ export default function NovaOcorrencia() {
       }
 
       // Envia a ocorrência para o backend
-      const resposta = await fetch("http://localhost:8080/ocorrencias", {
+      const resposta = await fetch("https://bairro-online-api.onrender.com/ocorrencias", {
         method: "POST",
         credentials: "include",
         headers: {

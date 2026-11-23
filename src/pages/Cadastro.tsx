@@ -22,7 +22,7 @@ export default function Cadastro() {
     setCarregando(true);
 
     try {
-      const resposta = await fetch("http://localhost:8080/usuarios", {
+      const resposta = await fetch("https://bairro-online-api.onrender.com/usuarios", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

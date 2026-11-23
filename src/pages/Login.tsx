@@ -17,41 +17,38 @@ export default function Login() {
 
     try {
       // Obter o token CSRF e iniciar a sessão de comunicação.
-      const respostaCsrf = await fetch("http://localhost:8080/csrf", {
-        credentials: "include",
-      });
+      const respostaCsrf = await fetch(
+        "https://bairro-online-api.onrender.com/csrf",
+        {
+          credentials: "include",
+        },
+      );
 
       if (!respostaCsrf.ok) {
         throw new Error("Não foi possível iniciar a autenticação.");
       }
 
       // 2. Ler o token do cookie criado pelo Spring Security.
-      const cookieCsrf = document.cookie
-        .split("; ")
-        .find((cookie) => cookie.startsWith("XSRF-TOKEN="));
-
-      if (!cookieCsrf) {
-        throw new Error("Token de segurança não encontrado. Tente novamente.");
-      }
-
-      const tokenCsrf = decodeURIComponent(
-        cookieCsrf.substring("XSRF-TOKEN=".length),
-      );
+      const dadosCsrf: { token: string } = await respostaCsrf.json();
+      const tokenCsrf = dadosCsrf.token;
 
       // 3. Enviar as credenciais no formato esperado pelo Spring Security.
       const dados = new URLSearchParams();
       dados.append("username", email.trim());
       dados.append("password", senha);
 
-      const resposta = await fetch("http://localhost:8080/login", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "X-XSRF-TOKEN": tokenCsrf,
+      const resposta = await fetch(
+        "https://bairro-online-api.onrender.com/login",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-XSRF-TOKEN": tokenCsrf,
+          },
+          body: dados.toString(),
         },
-        body: dados.toString(),
-      });
+      );
 
       if (resposta.status === 401) {
         setMensagem("E-mail ou senha inválidos.");

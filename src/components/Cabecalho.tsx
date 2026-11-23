@@ -23,7 +23,7 @@ export default function Cabecalho() {
     async function carregarPerfil() {
       try {
         const resposta = await fetch(
-          "http://localhost:8080/usuarios/perfil",
+          "https://bairro-online-api.onrender.com/usuarios/perfil",
           { credentials: "include" },
         );
 
@@ -64,7 +64,7 @@ export default function Cabecalho() {
     setErroLogout("");
 
     try {
-      await fetch("http://localhost:8080/csrf", {
+      await fetch("https://bairro-online-api.onrender.com/csrf", {
         credentials: "include",
       });
 
@@ -80,7 +80,7 @@ export default function Cabecalho() {
         throw new Error("Não foi possível obter o token de segurança.");
       }
 
-      const resposta = await fetch("http://localhost:8080/logout", {
+      const resposta = await fetch("https://bairro-online-api.onrender.com/logout", {
         method: "POST",
         credentials: "include",
         headers: {

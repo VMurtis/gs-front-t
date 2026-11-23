@@ -154,7 +154,7 @@ export default function DetalheOcorrencia() {
           {ocorrencia.fotoUrl && (
             <div className="mt-6">
               <img
-                src={`http://localhost:8080${ocorrencia.fotoUrl}`}
+                src={`https://bairro-online-api.onrender.com${ocorrencia.fotoUrl}`}
                 alt={`Foto da ocorrência: ${ocorrencia.titulo}`}
                 className="max-h-96 w-full rounded-lg object-contain"
               />

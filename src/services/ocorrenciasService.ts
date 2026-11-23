@@ -21,10 +21,13 @@ export function listarOcorrencias(): Ocorrencia[] {
 }
 
 export async function listarMinhasOcorrenciasAPI(): Promise<Ocorrencia[]> {
-  const resposta = await fetch("http://localhost:8080/ocorrencias/minhas", {
-    method: "GET",
-    credentials: "include",
-  });
+  const resposta = await fetch(
+    "https://bairro-online-api.onrender.com/ocorrencias/minhas",
+    {
+      method: "GET",
+      credentials: "include",
+    },
+  );
 
   if (resposta.status === 401 || resposta.status === 403) {
     throw new Error(
@@ -100,10 +103,13 @@ export async function atualizarOcorrenciaAPI(
   dados: Pick<Ocorrencia, "titulo" | "categoria" | "descricao" | "endereco">,
 ): Promise<Ocorrencia> {
   // Solicita o token CSRF ao backend para garantir que o cookie seja atualizado.
-  const respostaCsrf = await fetch("http://localhost:8080/csrf", {
-    method: "GET",
-    credentials: "include",
-  });
+  const respostaCsrf = await fetch(
+    "https://bairro-online-api.onrender.com/csrf",
+    {
+      method: "GET",
+      credentials: "include",
+    },
+  );
 
   if (!respostaCsrf.ok) {
     throw new Error("Não foi possível obter o token de segurança (CSRF).");
@@ -123,15 +129,18 @@ export async function atualizarOcorrenciaAPI(
     cookieCsrf.substring("XSRF-TOKEN=".length),
   );
 
-  const resposta = await fetch(`http://localhost:8080/ocorrencias/${id}`, {
-    method: "PUT",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      "X-XSRF-TOKEN": tokenCsrf,
+  const resposta = await fetch(
+    `https://bairro-online-api.onrender.com/ocorrencias/${id}`,
+    {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "X-XSRF-TOKEN": tokenCsrf,
+      },
+      body: JSON.stringify(dados),
     },
-    body: JSON.stringify(dados),
-  });
+  );
 
   if (!resposta.ok) {
     throw new Error(
@@ -226,10 +235,13 @@ export function adicionarAtualizacaoOcorrencia(
 }
 
 export async function excluirOcorrenciaAPI(id: number): Promise<void> {
-  const respostaCsrf = await fetch("http://localhost:8080/csrf", {
-    method: "GET",
-    credentials: "include",
-  });
+  const respostaCsrf = await fetch(
+    "https://bairro-online-api.onrender.com/csrf",
+    {
+      method: "GET",
+      credentials: "include",
+    },
+  );
 
   if (!respostaCsrf.ok) {
     throw new Error("Não foi possível obter o token de segurança (CSRF).");
@@ -249,13 +261,16 @@ export async function excluirOcorrenciaAPI(id: number): Promise<void> {
     cookieCsrf.substring("XSRF-TOKEN=".length),
   );
 
-  const resposta = await fetch(`http://localhost:8080/ocorrencias/${id}`, {
-    method: "DELETE",
-    credentials: "include",
-    headers: {
-      "X-XSRF-TOKEN": tokenCsrf,
+  const resposta = await fetch(
+    `https://bairro-online-api.onrender.com/ocorrencias/${id}`,
+    {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "X-XSRF-TOKEN": tokenCsrf,
+      },
     },
-  });
+  );
 
   if (!resposta.ok) {
     throw new Error(
@@ -265,10 +280,13 @@ export async function excluirOcorrenciaAPI(id: number): Promise<void> {
 }
 
 export async function listarTodasOcorrenciasAdminAPI(): Promise<Ocorrencia[]> {
-  const resposta = await fetch("http://localhost:8080/admin/ocorrencias", {
-    method: "GET",
-    credentials: "include",
-  });
+  const resposta = await fetch(
+    "https://bairro-online-api.onrender.com/admin/ocorrencias",
+    {
+      method: "GET",
+      credentials: "include",
+    },
+  );
 
   if (!resposta.ok) {
     throw new Error(
@@ -313,10 +331,13 @@ export async function atualizarStatusOcorrenciaAdminAPI(
   id: number,
   status: StatusOcorrencia,
 ): Promise<void> {
-  const respostaCsrf = await fetch("http://localhost:8080/csrf", {
-    method: "GET",
-    credentials: "include",
-  });
+  const respostaCsrf = await fetch(
+    "https://bairro-online-api.onrender.com/csrf",
+    {
+      method: "GET",
+      credentials: "include",
+    },
+  );
 
   if (!respostaCsrf.ok) {
     throw new Error("Não foi possível obter o token CSRF.");
@@ -337,7 +358,7 @@ export async function atualizarStatusOcorrenciaAdminAPI(
   const parametros = new URLSearchParams({ status });
 
   const resposta = await fetch(
-    `http://localhost:8080/admin/ocorrencias/${id}/status?${parametros}`,
+    `https://bairro-online-api.onrender.com/admin/ocorrencias/${id}/status?${parametros}`,
     {
       method: "PATCH",
       credentials: "include",
@@ -358,10 +379,13 @@ export async function atualizarMensagemAdminAPI(
   id: number,
   mensagem: string,
 ): Promise<void> {
-  const respostaCsrf = await fetch("http://localhost:8080/csrf", {
-    method: "GET",
-    credentials: "include",
-  });
+  const respostaCsrf = await fetch(
+    "https://bairro-online-api.onrender.com/csrf",
+    {
+      method: "GET",
+      credentials: "include",
+    },
+  );
 
   if (!respostaCsrf.ok) {
     throw new Error("Não foi possível obter o token CSRF.");
@@ -382,7 +406,7 @@ export async function atualizarMensagemAdminAPI(
   const parametros = new URLSearchParams({ mensagem });
 
   const resposta = await fetch(
-    `http://localhost:8080/admin/ocorrencias/${id}/mensagem?${parametros}`,
+    `https://bairro-online-api.onrender.com/admin/ocorrencias/${id}/mensagem?${parametros}`,
     {
       method: "PATCH",
       credentials: "include",
