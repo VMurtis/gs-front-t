@@ -17,7 +17,11 @@ O vídeo de demonstração apresenta o projeto Bairro Online e deve evidenciar s
 |---|---|
 | Vinicius Murtinho Vicente | 551151 |
 
-> Se o projeto tiver outros integrantes, adicione todos os nomes e RMs nesta tabela.
+## Links do projeto
+
+- **Frontend (Vercel):** https://gs-front-bo.vercel.app/
+- **API (Render):** https://bairro-online-api.onrender.com
+- **Vídeo de demonstração:** https://youtu.be/1dqDGYF82xo
 
 ## Versionamento
 
@@ -25,7 +29,10 @@ O projeto utiliza Git e GitHub para controle de versão e acompanhamento do dese
 
 A versão `v1.0.0` representa a primeira versão consolidada publicada do frontend.
 
-Consulte as [Releases do projeto](https://github.com/VMurtis/gs-front-t/releases) para acessar as versões disponibilizadas.
+Consulte as [Releases do projeto](https://github.com/VMurtis/gs-front-bo/releases) para acessar as versões disponibilizadas.
+
+
+
 
 
 ## Objetivo do projeto
@@ -77,7 +84,7 @@ O projeto está dividido em frontend e backend, mantidos em repositórios separa
 
 ### Frontend
 
-Repositório: [gs-front-t](https://github.com/VMurtis/gs-front-t)
+Repositório: [gs-front-t](https://github.com/VMurtis/gs-front)
 
 A estrutura inclui páginas, componentes reutilizáveis, serviços de comunicação com a API e tipos utilizados pela aplicação.
 
@@ -140,9 +147,6 @@ O backend disponibiliza a API REST responsável pelo processamento das operaçõ
 
 Para executar o backend localmente, consulte as instruções e os requisitos descritos no [repositório da API](https://github.com/VMurtis/bairro-online-api).
 
-A API publicada está disponível em:
-
-[https://bairro-online-api.onrender.com](https://bairro-online-api.onrender.com)
 
 
 ---
